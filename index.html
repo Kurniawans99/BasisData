@@ -1,22 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tugas Akhir Basis Data</title>
-    <link rel="stylesheet" href="style.css" />
+    <title>Frontend Node.js & MySQL</title>
   </head>
   <body>
-    <h1>Data dari Database</h1>
-    <ul id="user-list"></ul>
+    <h1>Data Pengguna</h1>
+    <div id="data"></div>
 
-    <h2>Tambah User Baru</h2>
-    <form id="add-user-form">
-      <input type="text" id="name" placeholder="Nama" required />
-      <input type="email" id="email" placeholder="Email" required />
+    <h2>Tambah Pengguna</h2>
+    <form id="form-tambah">
+      <label for="nama">Nama: </label>
+      <input type="text" id="nama" name="nama" required /><br />
+      <label for="umur">Gmail: </label>
+      <input type="text" id="umur" name="umur" required /><br />
       <button type="submit">Tambah</button>
     </form>
 
-    <script src="app.js"></script>
+    <script>
+      // Fungsi untuk mengambil data dari API
+      function ambilData() {
+        fetch("http://localhost:8000/api/data")
+          .then((response) => response.json())
+          .then((data) => {
+            const dataDiv = document.getElementById("data");
+            dataDiv.innerHTML =
+              "<ul>" +
+              data
+                .map((item) => `<li>${item.name} - ${item.email}</li>`)
+                .join("") +
+              "</ul>";
+          })
+          .catch((error) => console.error("Terjadi kesalahan:", error));
+      }
+
+      // Fungsi untuk menambahkan data
+      document
+        .getElementById("form-tambah")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const nama = document.getElementById("nama").value;
+          const umur = document.getElementById("umur").value;
+
+          fetch(`http://localhost:8000/api/tambah?nama=${nama}&umur=${umur}`)
+            .then((response) => response.text())
+            .then((data) => {
+              alert(data);
+              ambilData(); // Mengambil data terbaru setelah menambah data
+            })
+            .catch((error) => console.error("Terjadi kesalahan:", error));
+        });
+
+      // Ambil data saat halaman dimuat
+      window.onload = ambilData;
+    </script>
   </body>
 </html>
