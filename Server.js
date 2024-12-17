@@ -31,16 +31,26 @@ connection.connect((err) => {
   );
 });
 
-// Route: GET semua data karyawan
+// Route: GET semua data karyawan atau filter berdasarkan id_restoran
 app.get("/api/data/karyawan", (req, res) => {
-  connection.query("SELECT * FROM karyawan", (err, results) => {
+  const { id_restoran } = req.query; // Ambil id_restoran dari query parameter
+
+  let query = "SELECT * FROM karyawan";
+  let params = [];
+
+  if (id_restoran) {
+    query += " WHERE id_restoran = ?";
+    params.push(id_restoran);
+  }
+
+  connection.query(query, params, (err, results) => {
     if (err) {
       console.error("Error fetching data:", err);
       return res
         .status(500)
         .json({ message: "Terjadi kesalahan pada server", error: err.message });
     }
-    res.status(200).json(results); // Kirim data dalam format JSON
+    res.status(200).json(results); // Kirim data hasil query
   });
 });
 
@@ -198,12 +208,10 @@ app.post("/api/tambah/restoran", (req, res) => {
           .status(500)
           .json({ message: "Failed to add restoran", error: err.message });
       }
-      res
-        .status(201)
-        .json({
-          message: "Restoran berhasil ditambahkan",
-          id: result.insertId,
-        });
+      res.status(201).json({
+        message: "Restoran berhasil ditambahkan",
+        id: result.insertId,
+      });
     }
   );
 });
@@ -260,6 +268,19 @@ app.delete("/api/hapus/restoran/:id", (req, res) => {
 
     res.status(200).json({ message: "Restoran berhasil dihapus" });
   });
+});
+
+// Cek ID Restoran
+app.get("/api/cek/restoran/:id", (req, res) => {
+  const idRestoran = req.params.id;
+  db.query(
+    "SELECT * FROM restoran WHERE id_restoran = ?",
+    [idRestoran],
+    (err, results) => {
+      if (err) throw err;
+      res.json({ exists: results.length > 0 });
+    }
+  );
 });
 
 // Server berjalan pada port yang ditentukan
