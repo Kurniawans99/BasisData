@@ -74,6 +74,15 @@
             <main class="w-full flex-grow p-6">
                 <h1 class="text-3xl text-black pb-6">Restoran</h1>
 
+                <!-- Dropdown untuk filter berdasarkan id_perusahaan -->
+<div class="mt-8">
+    <label for="perusahaan-filter" class="block text-sm font-medium text-gray-700">Filter Perusahaan</label>
+    <select id="perusahaanDropdown" class="form-select mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm">
+        <option value="">-- Semua Perusahaan --</option>
+        <!-- Opsi lainnya akan ditambahkan lewat JavaScript -->
+      </select>
+  </div>
+
                         <!-- Table Restoran -->
                         <div class="w-full mt-12">
                             <p class="text-xl pb-3 flex items-center">

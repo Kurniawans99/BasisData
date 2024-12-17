@@ -158,16 +158,25 @@ app.delete("/api/hapus/karyawan/:id", (req, res) => {
   });
 });
 
-// Route: GET semua data restoran
+// Route: GET semua restoran berdasarkan id_perusahaan
 app.get("/api/data/restoran", (req, res) => {
-  connection.query("SELECT * FROM restoran", (err, results) => {
+  const { id_perusahaan } = req.query; // Mengambil id_perusahaan dari query parameter
+  let query = "SELECT * FROM restoran";
+  let params = [];
+
+  if (id_perusahaan) {
+    query += " WHERE id_perusahaan = ?";
+    params.push(id_perusahaan);
+  }
+
+  connection.query(query, params, (err, results) => {
     if (err) {
       console.error("Error fetching data:", err);
       return res
         .status(500)
         .json({ message: "Terjadi kesalahan pada server", error: err.message });
     }
-    res.status(200).json(results);
+    res.status(200).json(results); // Kirim data hasil query
   });
 });
 
