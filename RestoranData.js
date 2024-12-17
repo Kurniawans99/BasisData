@@ -19,7 +19,6 @@ function loadRestoran() {
                     <td class="px-5 py-5 border-b">${restoran.nomor_telepon}</td>
                     <td class="px-5 py-5 border-b">${formattedDate}</td>
                     <td class="px-5 py-5 border-b">${restoran.kapasitas}</td>
-                    <td class="px-5 py-5 border-b">${restoran.id_perusahaan}</td>
                     <td class="px-5 py-5 border-b">
                         <button class="text-blue-500" onclick="editRestoran(${restoran.id_restoran})">Edit</button>
                         <button class="text-red-500 ml-2" onclick="hapusRestoran(${restoran.id_restoran})">Hapus</button>
