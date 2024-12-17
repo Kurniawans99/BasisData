@@ -17,7 +17,7 @@ const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
-  database: "restoran",
+  database: "multi_restoran",
 });
 
 // Menyambungkan ke database
