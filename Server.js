@@ -6,8 +6,7 @@ const port = 8000;
 
 app.use(express.json()); // Middleware untuk parsing JSON body
 app.use(express.urlencoded({ extended: true })); // Middleware untuk parsing urlencoded body
-// Aktifkan CORS
-app.use(cors()); // Ini mengizinkan semua permintaan CORS
+app.use(cors()); // Aktifkan CORS agar semua request bisa diterima
 
 // Set EJS sebagai template engine
 app.set("view engine", "ejs");
@@ -32,31 +31,39 @@ connection.connect((err) => {
   );
 });
 
-// Menyiapkan route untuk mendapatkan data dari MySQL
-
+// Route: GET semua data karyawan
 app.get("/api/data/karyawan", (req, res) => {
   connection.query("SELECT * FROM karyawan", (err, results) => {
     if (err) {
-      res.status(500).send("Terjadi kesalahan pada server");
-      return;
+      console.error("Error fetching data:", err);
+      return res
+        .status(500)
+        .json({ message: "Terjadi kesalahan pada server", error: err.message });
     }
-    res.json(results); // Mengirim data sebagai JSON
+    res.status(200).json(results); // Kirim data dalam format JSON
   });
 });
 
-// Menyiapkan route untuk menambahkan data ke MySQL
+// Route: POST tambah karyawan
 app.post("/api/tambah/karyawan", (req, res) => {
   const { nama, posisi, nomor_telepon, shift, alamat, id_restoran } = req.body;
 
-  console.log("Menerima data:", req.body); // Debug log untuk memastikan data yang dikirim
-  // Validasi nilai ENUM untuk shift
+  console.log("Menerima data:", req.body); // Debug log untuk memastikan data
+
+  // Validasi input
+  if (!nama || !posisi || !nomor_telepon || !shift || !alamat || !id_restoran) {
+    return res.status(400).json({ message: "Semua field harus diisi!" });
+  }
+
+  // Validasi shift
   const validShifts = ["Pagi", "Siang", "Malam"];
   if (!validShifts.includes(shift)) {
     return res
       .status(400)
-      .send("Shift harus salah satu dari: Pagi, Siang, Malam");
+      .json({ message: "Shift harus salah satu dari: Pagi, Siang, Malam" });
   }
 
+  // Query untuk menambahkan data
   const query = `
     INSERT INTO karyawan (nama, posisi, nomor_telepon, shift, alamat, id_restoran) 
     VALUES (?, ?, ?, ?, ?, ?)
@@ -64,17 +71,47 @@ app.post("/api/tambah/karyawan", (req, res) => {
 
   connection.query(
     query,
-    [nama, posisi, nomor_telepon, shift, alamat, id_restoran], // Sertakan id_restoran dalam query
-    (err) => {
+    [nama, posisi, nomor_telepon, shift, alamat, id_restoran],
+    (err, result) => {
       if (err) {
-        console.error("Error inserting data:", err); // Menampilkan kesalahan di konsol server
-        return res.status(500).send("Failed to add karyawan");
+        console.error("Error inserting data:", err);
+        return res
+          .status(500)
+          .json({ message: "Failed to add karyawan", error: err.message });
       }
-      res.status(201).send("Karyawan added");
+      res.status(201).json({
+        message: "Karyawan berhasil ditambahkan",
+        id: result.insertId, // Kirim ID hasil penambahan
+      });
     }
   );
 });
 
+// Route: DELETE hapus karyawan berdasarkan ID
+app.delete("/api/hapus/karyawan/:id", (req, res) => {
+  const { id } = req.params;
+
+  const query = `DELETE FROM karyawan WHERE id_karyawan = ?`;
+  connection.query(query, [id], (err, result) => {
+    if (err) {
+      console.error("Error deleting data:", err);
+      return res
+        .status(500)
+        .json({ message: "Failed to delete karyawan", error: err.message });
+    }
+
+    if (result.affectedRows === 0) {
+      // Jika ID tidak ditemukan
+      return res
+        .status(404)
+        .json({ message: "Karyawan dengan ID tersebut tidak ditemukan" });
+    }
+
+    res.status(200).json({ message: "Karyawan berhasil dihapus" });
+  });
+});
+
+// Server berjalan pada port yang ditentukan
 app.listen(port, () => {
   console.log(`Server berjalan di http://localhost:${port}`);
 });
