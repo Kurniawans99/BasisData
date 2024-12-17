@@ -283,6 +283,94 @@ app.get("/api/cek/restoran/:id", (req, res) => {
   );
 });
 
+// Route: GET semua data perusahaan
+app.get("/api/data/perusahaan", (req, res) => {
+  connection.query("SELECT * FROM perusahaan", (err, results) => {
+    if (err) {
+      console.error("Error fetching data:", err);
+      return res
+        .status(500)
+        .json({ message: "Terjadi kesalahan pada server", error: err.message });
+    }
+    res.status(200).json(results);
+  });
+});
+
+// Route: POST tambah perusahaan
+app.post("/api/tambah/perusahaan", (req, res) => {
+  const { nama, email, nomor_telepon, website, alamat, id_pemilik } = req.body;
+
+  // Validasi input
+  if (!nama || !email || !nomor_telepon || !website || !alamat || !id_pemilik) {
+    return res.status(400).json({ message: "Semua field harus diisi!" });
+  }
+
+  const query = `
+    INSERT INTO perusahaan (nama, email, nomor_telepon, website, alamat, id_pemilik)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+  connection.query(
+    query,
+    [nama, email, nomor_telepon, website, alamat, id_pemilik],
+    (err, result) => {
+      if (err) {
+        console.error("Error inserting data:", err);
+        return res
+          .status(500)
+          .json({ message: "Failed to add perusahaan", error: err.message });
+      }
+      res.status(201).json({
+        message: "Perusahaan berhasil ditambahkan",
+        id: result.insertId,
+      });
+    }
+  );
+});
+
+// Route: PUT edit perusahaan berdasarkan ID
+app.put("/api/edit/perusahaan/:id", (req, res) => {
+  const { id } = req.params;
+  const { nama, email, nomor_telepon, website, alamat, id_pemilik } = req.body;
+
+  const query = `
+    UPDATE perusahaan 
+    SET nama = ?, email = ?, nomor_telepon = ?, website = ?, alamat = ?, id_pemilik = ?
+    WHERE id_perusahaan = ?
+  `;
+  connection.query(
+    query,
+    [nama, email, nomor_telepon, website, alamat, id_pemilik, id],
+    (err, result) => {
+      if (err) {
+        console.error("Error updating data:", err);
+        return res
+          .status(500)
+          .json({ message: "Failed to update perusahaan", error: err.message });
+      }
+      res.status(200).json({ message: "Perusahaan berhasil diperbarui" });
+    }
+  );
+});
+
+// Route: DELETE hapus perusahaan berdasarkan ID
+app.delete("/api/hapus/perusahaan/:id", (req, res) => {
+  const { id } = req.params;
+
+  const query = `DELETE FROM perusahaan WHERE id_perusahaan = ?`;
+  connection.query(query, [id], (err, result) => {
+    if (err) {
+      console.error("Error deleting data:", err);
+      return res
+        .status(500)
+        .json({ message: "Failed to delete perusahaan", error: err.message });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Perusahaan tidak ditemukan" });
+    }
+    res.status(200).json({ message: "Perusahaan berhasil dihapus" });
+  });
+});
+
 // Server berjalan pada port yang ditentukan
 app.listen(port, () => {
   console.log(`Server berjalan di http://localhost:${port}`);

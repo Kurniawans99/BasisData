@@ -37,13 +37,19 @@
                 Dashboard
             </a>
            
-            <a href="Karyawan.html" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
+            <a href="Perusahaan.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                 <i class="fas fa-table mr-3"></i>
-                Karyawan
+                Perusahaan
             </a>
+
             <a href="Restoran.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                 <i class="fas fa-table mr-3"></i>
                 Restoran
+            </a>
+
+            <a href="Karyawan.html" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
+                <i class="fas fa-table mr-3"></i>
+                Karyawan
             </a>
            
         </nav>
@@ -57,12 +63,6 @@
                 <button @click="isOpen = !isOpen" class="realtive z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none">
                   <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGxNmehgY0JqgDBdNG_yQ9R01I4H4FJ80fbw&s"/>
                 </button>
-                <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
-                <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
-                    <a href="#" class="block px-4 py-2 account-link hover:text-white">Account</a>
-                    <a href="#" class="block px-4 py-2 account-link hover:text-white">Support</a>
-                    <a href="#" class="block px-4 py-2 account-link hover:text-white">Sign Out</a>
-                </div>
             </div>
         </header>
 
