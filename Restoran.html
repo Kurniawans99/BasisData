@@ -41,7 +41,7 @@
                 <i class="fas fa-table mr-3"></i>
                 Restoran
             </a>
-            <a href="Restoran.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+            <a href="inventaris.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                 <i class="fas fa-table mr-3"></i>
                 Inventaris
             </a>
@@ -127,34 +127,75 @@
             <main class="w-full flex-grow p-6">
                 <h1 class="text-3xl text-black pb-6">Restoran</h1>
 
-                <div class="w-full mt-12">
-                    <p class="text-xl pb-3 flex items-center">
-                        <i class="fas fa-list mr-3"></i> Restoran
-                    </p>
-                    <div class="bg-white overflow-auto">
-                        <table id="restoranTable" class="min-w-full leading-normal">
-                            <thead>
-                                <tr>
-                                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nama</th>
-                                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Posisi</th>
-                                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nomor Telepon</th>
-                                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Shift</th>
-                                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Alamat</th>
-                                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th> <!-- Menambahkan kolom Actions -->
-                                </tr>
-                            </thead>
-                            <tbody >
-                               
-                            </tbody>
-                        </table>
-                    </div>
-                  
-                </div>
-            </main>
-    
-            <footer class="w-full bg-white text-right p-4">
-                Built by <a target="_blank" href="https://davidgrzyb.com" class="underline">Kelompok 7</a>.
-            </footer>
+                        <!-- Table Restoran -->
+                        <div class="w-full mt-12">
+                            <p class="text-xl pb-3 flex items-center">
+                                <i class="fas fa-store mr-3"></i> Daftar Restoran
+                            </p>
+                            <div class="bg-white overflow-auto shadow-md rounded">
+                                <table id="restoranTable" class="min-w-full leading-normal">
+                                    <thead>
+                                        <tr>
+                                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Kota</th>
+                                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Alamat</th>
+                                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nomor Telepon</th>
+                                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tanggal Dibuka</th>
+                                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Kapasitas</th>
+                                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">ID Perusahaan</th>
+                                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Data akan dimuat melalui JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                
+                        <!-- Form Tambah/Edit Restoran -->
+                        <div class="mt-8">
+                            <p class="text-xl pb-3 flex items-center">
+                                <i class="fas fa-plus-circle mr-3"></i> Tambah/Edit Restoran
+                            </p>
+                            <div class="bg-white p-5 shadow-md rounded">
+                                <form id="restoranForm">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="kota" class="block text-sm font-medium text-gray-700">Kota</label>
+                                            <input type="text" id="kota" name="kota" class="mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm" required>
+                                        </div>
+                                        <div>
+                                            <label for="alamat" class="block text-sm font-medium text-gray-700">Alamat</label>
+                                            <input type="text" id="alamat" name="alamat" class="mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm" required>
+                                        </div>
+                                        <div>
+                                            <label for="nomor_telepon" class="block text-sm font-medium text-gray-700">Nomor Telepon</label>
+                                            <input type="text" id="nomor_telepon" name="nomor_telepon" class="mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm" required>
+                                        </div>
+                                        <div>
+                                            <label for="tanggal_dibuka" class="block text-sm font-medium text-gray-700">Tanggal Dibuka</label>
+                                            <input type="date" id="tanggal_dibuka" name="tanggal_dibuka" class="mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm" required>
+                                        </div>
+                                        <div>
+                                            <label for="kapasitas" class="block text-sm font-medium text-gray-700">Kapasitas</label>
+                                            <input type="number" id="kapasitas" name="kapasitas" class="mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm" required>
+                                        </div>
+                                        <div>
+                                            <label for="id_perusahaan" class="block text-sm font-medium text-gray-700">ID Perusahaan</label>
+                                            <input type="number" id="id_perusahaan" name="id_perusahaan" class="mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm" required>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4">
+                                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Simpan</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </main>
+                
+                    <footer class="w-full bg-white text-right p-4">
+                        Dibuat oleh <a target="_blank" href="#" class="underline">Kelompok 7</a>.
+                    </footer>
         </div>
         
     </div>
@@ -166,7 +207,7 @@
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <!-- Font Awesome -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
-
+<script src="RestoranData.js"></script>
     
 </body>
 </html>

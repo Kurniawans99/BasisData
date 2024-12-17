@@ -55,7 +55,7 @@
             <div class="w-1/2"></div>
             <div x-data="{ isOpen: false }" class="relative w-1/2 flex justify-end">
                 <button @click="isOpen = !isOpen" class="realtive z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none">
-                    <img src="https://source.unsplash.com/uJ8LNVCBjFQ/400x400">
+                    <img src="V.jpg">
                 </button>
                 <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
                 <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
@@ -150,16 +150,8 @@
                     </div>
                   
                 </div>
-            </main>
-    
-            <footer class="w-full bg-white text-right p-4">
-                Built by <a target="_blank" href="https://davidgrzyb.com" class="underline">Kelompok 7</a>.
-            </footer>
-        </div>
-        
-    </div>
 
-    <!-- Form Tambah Karyawan -->
+                    <!-- Form Tambah Karyawan -->
 <div class="mt-8">
     <p class="text-xl pb-3 flex items-center">
         <i class="fas fa-plus-circle mr-3"></i> Tambah Karyawan
@@ -203,13 +195,23 @@
         </form>
     </div>
 </div>
+            </main>
+    
+            <footer class="w-full bg-white text-right p-4">
+                Built by <a target="_blank" href="https://davidgrzyb.com" class="underline">Kelompok 7</a>.
+            </footer>
+        </div>
+        
+    </div>
+
+
 
 </div>
     <!-- AlpineJS -->
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <!-- Font Awesome -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
-    <script src="GetKaryawanData.js"></script>
+    <script src="karyawanData.js"></script>
     
 </body>
 </html>
