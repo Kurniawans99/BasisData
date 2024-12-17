@@ -87,6 +87,43 @@ app.post("/api/tambah/karyawan", (req, res) => {
   );
 });
 
+// Update data karyawan berdasarkan ID
+app.put("/api/edit/karyawan/:id", (req, res) => {
+  const { id } = req.params; // Ambil id dari parameter
+  const { nama, posisi, nomor_telepon, shift, alamat, id_restoran } = req.body;
+
+  console.log("Menerima data untuk update:", req.body); // Debugging
+
+  // Validasi nilai ENUM untuk shift
+  const validShifts = ["Pagi", "Siang", "Malam"];
+  if (!validShifts.includes(shift)) {
+    return res
+      .status(400)
+      .json({ message: "Shift harus salah satu dari: Pagi, Siang, Malam" });
+  }
+
+  // Query untuk mengupdate data
+  const query = `
+    UPDATE karyawan 
+    SET nama = ?, posisi = ?, nomor_telepon = ?, shift = ?, alamat = ?, id_restoran = ?
+    WHERE id_karyawan = ?
+  `;
+
+  connection.query(
+    query,
+    [nama, posisi, nomor_telepon, shift, alamat, id_restoran, id],
+    (err, result) => {
+      if (err) {
+        console.error("Error updating data:", err);
+        return res
+          .status(500)
+          .json({ message: "Failed to update karyawan", error: err.message });
+      }
+      res.status(200).json({ message: "Karyawan updated successfully" });
+    }
+  );
+});
+
 // Route: DELETE hapus karyawan berdasarkan ID
 app.delete("/api/hapus/karyawan/:id", (req, res) => {
   const { id } = req.params;

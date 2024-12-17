@@ -31,59 +31,73 @@ function loadKaryawan() {
 }
 
 // Tambah karyawan baru
-addKaryawanForm.addEventListener("submit", (e) => {
-  e.preventDefault(); // Mencegah form submit default
+addKaryawanForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+  const id = addKaryawanForm.getAttribute("data-id"); // Ambil ID jika ada
 
-  const newKaryawan = {
+  const karyawanData = {
     nama: document.querySelector("#nama").value,
     posisi: document.querySelector("#posisi").value,
     nomor_telepon: document.querySelector("#nomor_telepon").value,
     shift: document.querySelector("#shift").value,
     alamat: document.querySelector("#alamat").value,
-    id_restoran: document.querySelector("#id_restoran").value, // Menambahkan id_restoran
+    id_restoran: document.querySelector("#id_restoran").value,
   };
 
-  // Kirim data ke backend
-  fetch("http://localhost:8000/api/tambah/karyawan", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newKaryawan),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        return response.text().then((text) => {
-          throw new Error(text); // Jika bukan JSON, lempar error
-        });
-      }
-      return response.json();
+  // PUT untuk update jika ada ID, POST untuk tambah jika tidak ada ID
+  if (id) {
+    fetch(`http://localhost:8000/api/edit/karyawan/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(karyawanData),
     })
-    .then((data) => {
-      loadKaryawan();
-      alert(data.message || "Karyawan berhasil ditambahkan");
+      .then((response) => response.json())
+      .then((data) => {
+        alert("Data karyawan berhasil diperbarui");
+        loadKaryawan(); // Muat ulang tabel data
+        addKaryawanForm.removeAttribute("data-id"); // Reset ID di form
+        addKaryawanForm.reset(); // Reset form
+      })
+      .catch((error) => console.error("Error updating karyawan:", error));
+  } else {
+    // Tambahkan data baru jika ID tidak ada
+    fetch("http://localhost:8000/api/tambah/karyawan", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(karyawanData),
     })
-    .catch((err) => {
-      console.error("Error adding data:", err.message);
-      alert("Gagal menambahkan karyawan: " + err.message);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        alert("Data karyawan berhasil ditambahkan");
+        loadKaryawan(); // Muat ulang tabel data
+        addKaryawanForm.reset();
+      })
+      .catch((error) => console.error("Error adding karyawan:", error));
+  }
 });
+// Ambil data karyawan untuk diedit dan isi form
 function editKaryawan(id) {
-  fetch(`http://localhost:8000/api/karyawan/${id}`) // Ambil data karyawan berdasarkan ID
+  fetch(`http://localhost:8000/api/data/karyawan`)
     .then((response) => response.json())
-    .then((karyawan) => {
-      // Isi form dengan data karyawan
-      document.getElementById("nama").value = karyawan.nama;
-      document.getElementById("posisi").value = karyawan.posisi;
-      document.getElementById("nomor_telepon").value = karyawan.nomor_telepon;
-      document.getElementById("shift").value = karyawan.shift;
-      document.getElementById("alamat").value = karyawan.alamat;
-      document.getElementById("id_restoran").value = karyawan.id_restoran;
+    .then((data) => {
+      // Cari karyawan dengan ID yang sesuai
+      const karyawan = data.find((item) => item.id_karyawan == id);
+      if (!karyawan) return alert("Karyawan tidak ditemukan!");
 
-      // Menambahkan ID karyawan ke form untuk pengeditan
-      document
-        .getElementById("addKaryawanForm")
-        .setAttribute("data-id", karyawan.id);
+      // Isi form dengan data karyawan
+      document.querySelector("#nama").value = karyawan.nama;
+      document.querySelector("#posisi").value = karyawan.posisi;
+      document.querySelector("#nomor_telepon").value = karyawan.nomor_telepon;
+      document.querySelector("#shift").value = karyawan.shift;
+      document.querySelector("#alamat").value = karyawan.alamat;
+      document.querySelector("#id_restoran").value = karyawan.id_restoran;
+
+      // Tambahkan ID ke form untuk proses edit
+      addKaryawanForm.setAttribute("data-id", karyawan.id_karyawan);
     })
     .catch((error) => console.error("Error loading data for edit:", error));
 }
